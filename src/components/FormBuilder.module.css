@@ -1,0 +1,43 @@
+.formBuilder {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.formFieldsContainer{
+  min-height: 70vh;
+}
+
+.btnSection{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.btnSection button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.8rem 2rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 1rem 1rem 0;
+}
+
+.btnSection button:hover {
+  background-color: #45a049;
+}
+
+.btnSection button:disabled{
+  background-color: #38693b;
+  color: #afaeae;
+  cursor: not-allowed;
+}
+
+input[type="file"] {
+  margin-top: 10px;
+}

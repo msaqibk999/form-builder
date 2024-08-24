@@ -1,0 +1,52 @@
+.previewForm {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  
+  .formField {
+    margin-bottom: 20px;
+  }
+  
+  .formField label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .formField input,
+  .formField select,
+  .formField textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .formField input[type="file"] {
+    padding: 3px;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 5px;
+    font-size: 0.9em;
+  }
+  
+  .previewForm button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .previewForm button:hover {
+    background-color: #45a049;
+  }
+  
