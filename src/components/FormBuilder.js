@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const FormBuilder = ({ formConfig, onSaveForm }) => {
   const [fields, setFields] = useState(formConfig.fields);
   const navigate = useNavigate();
-  console.log(fields)
 
   const addField = () => {
     setFields([
@@ -32,7 +31,6 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
   };
 
   const handleUpdateField = (updatedField, index) => {
-    console.log("updated field = " + JSON.stringify(updatedField))
     const newFields = [...fields];
     newFields[index] = updatedField;
     setFields(newFields);
@@ -47,6 +45,7 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
     const formConfig = { fields };
     localStorage.setItem("savedFormConfig", JSON.stringify(formConfig));
     onSaveForm(formConfig);
+    alert("Form saved!");
   };
 
   const handleLoadFormConfig = () => {
@@ -85,9 +84,8 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
 
   return (
     <div className={styles.formBuilder}>
-      <h1>Form Builder</h1>
       <div className={styles.formFieldsContainer}>
-        {fields.length > 0 &&
+        {fields.length > 0 ? (
           fields.map((field, index) => (
             <FormField
               key={field.id}
@@ -97,7 +95,10 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
                 handleUpdateField(updatedField, index);
               }}
             />
-          ))}
+          ))
+        ) : (
+          <div className={styles.empty}>Please start adding fields!</div>
+        )}
       </div>
       <section className={styles.btnSection}>
         <button onClick={addField}>Add Field</button>

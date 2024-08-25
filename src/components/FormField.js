@@ -12,7 +12,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
   );
 
   // Store a reference to the timer for debouncing
-  // const debounceTimeoutRef = useRef(null);
+  const debounceTimeoutRef = useRef(null);
 
   // Function to update the field state
   const updateField = () => {
@@ -27,39 +27,31 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
     });
   };
 
-  // // Function to debounce updates
-  // const debounceUpdateField = () => {
-  //   // Clear the previous timeout
-  //   if (debounceTimeoutRef.current) {
-  //     clearTimeout(debounceTimeoutRef.current);
-  //   }
+  // Function to debounce updates
+  const debounceUpdateField = () => {
+    // Clear the previous timeout
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
 
-  //   // Set a new timeout
-  //   debounceTimeoutRef.current = setTimeout(() => {
-  //     updateField();
-  //   }, 300); // 300ms debounce
-  // };
+    // Set a new timeout
+    debounceTimeoutRef.current = setTimeout(() => {
+      updateField();
+    }, 300); // 300ms debounce
+  };
 
   // Call debounceUpdateField whenever any of these states change
   useEffect(() => {
-    console.log("required = " + required)
-    // debounceUpdateField();
-    updateField();
+    debounceUpdateField();
 
     // Cleanup the timeout when component unmounts
-    // return () => {
-    //   if (debounceTimeoutRef.current) {
-    //     clearTimeout(debounceTimeoutRef.current);
-    //   }
-    // };
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+    // eslint-disable-next-line
   }, [label, type, options, required, validations, conditionalField]); // Dependencies
-
-  const handleRequiredChange = (e) => {
-    console.log("checkbox = " + e.target.checked)
-    setRequired(e.target.checked);
-    
-  }
-
 
   return (
     <div className={styles.formField}>
@@ -74,10 +66,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
       </label>
       <label>
         Type:
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        >
+        <select value={type} onChange={(e) => setType(e.target.value)}>
           <option value="text">Text</option>
           <option value="textarea">Textarea</option>
           <option value="dropdown">Dropdown</option>
@@ -87,12 +76,12 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
         </select>
       </label>
 
-      {type === "dropdown" && (
+      {(type === "radio" || type === "dropdown") && (
         <label>
           Options:
           <textarea
             value={options.join(",")}
-            onChange={(e) => setOptions(e.target.value.split(","))}
+            onChange={(e) => setOptions(e.target.value.split(",").map((val) => val.trim()))}
             placeholder="Comma-separated options"
           />
         </label>
@@ -103,7 +92,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
         <input
           type="checkbox"
           checked={required}
-          onChange={(e) => handleRequiredChange(e)}
+          onChange={(e) => setRequired(e.target.checked)}
         />
       </label>
 
@@ -173,7 +162,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
                 onChange={(e) => {
                   setValidations({
                     ...validations,
-                    fileType: e.target.value.split(","),
+                    fileType: e.target.value.split(",").map((val) => val.trim()),
                   });
                 }}
               />

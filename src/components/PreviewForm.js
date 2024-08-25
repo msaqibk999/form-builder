@@ -1,102 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./PreviewForm.module.css";
+import validateFields from "../utils/validations";
+import { useNavigate } from "react-router-dom";
 
 const PreviewForm = ({ formConfig }) => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleChange = (id, value) => {
     setFormData({ ...formData, [id]: value });
-  };
-
-  const validateFields = () => {
-    let valid = true;
-    // Initializing empty error object
-    let newErrors = {};
-
-    formConfig.fields.forEach((field) => {
-      const value = formData[field.id];
-      const { required, validations } = field;
-
-      // Required validation
-      if (required && !value) {
-        newErrors[field.id] = `${field.label} is required`;
-        valid = false;
-      }
-
-      // Min/Max length validation
-      if (
-        value &&
-        validations?.minLength &&
-        value.length < validations.minLength
-      ) {
-        newErrors[
-          field.id
-        ] = `${field.label} must be at least ${validations.minLength} characters`;
-        valid = false;
-      }
-      if (
-        value &&
-        validations?.maxLength &&
-        value.length > validations.maxLength
-      ) {
-        newErrors[
-          field.id
-        ] = `${field.label} must be less than ${validations.maxLength} characters`;
-        valid = false;
-      }
-
-      // Email validation
-      if (value && validations?.format === "email") {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)) {
-          newErrors[field.id] = "Invalid email format";
-          valid = false;
-        }
-      }
-
-      // Phone number validation
-      if (value && validations?.format === "phone") {
-        const phoneRegex = /^\d{10}$/;
-        if (!phoneRegex.test(value)) {
-          newErrors[field.id] = "Invalid phone number format";
-          valid = false;
-        }
-      }
-
-      // Password validation
-      if (value && validations?.format === "password") {
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-        if (!passwordRegex.test(value)) {
-          newErrors[field.id] =
-            "Password must have minimum eight characters, at least one letter and one number";
-          valid = false;
-        }
-      }
-
-      // File validation (size/type)
-      if (field.type === "file" && value) {
-        const file = value[0]; // Assuming single file upload
-        if (
-          validations?.fileType &&
-          !validations.fileType.includes(file.type)
-        ) {
-          newErrors[
-            field.id
-          ] = `Invalid file type. Allowed: ${validations.fileType.join(", ")}`;
-          valid = false;
-        }
-        if (validations?.maxSize && file.size > validations.maxSize) {
-          newErrors[field.id] = `File size exceeds the limit of ${
-            validations.maxSize / (1024 * 1024)
-          }MB`;
-          valid = false;
-        }
-      }
-    });
-
-    setErrors(newErrors);
-    return valid;
   };
 
   // Check if the field should be shown based on conditional logic
@@ -117,21 +30,39 @@ const PreviewForm = ({ formConfig }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateFields()) {
+    const { isValid, newErrors } = validateFields(formConfig, formData);
+    setErrors(newErrors);
+
+    if (isValid) {
+      // Create a new object with keys as labels instead of IDs
+      const formattedData = Object.keys(formData).reduce((acc, key) => {
+        const field = formConfig.fields.find(
+          (field) => field.id === Number(key)
+        );
+        if (field) {
+          acc[field.label] = formData[key]; // Map the label to the corresponding value
+        }
+        return acc;
+      }, {});
       alert("Form submitted successfully!");
-      console.log(formData); // Submit form data or send to backend
+      console.log(formattedData); // Submit form data or send to backend
     }
   };
+
+  useEffect(()=>{
+    if(formConfig.fields.length === 0) navigate("/")
+    // eslint-disable-next-line
+  },[])
 
   return (
     <div className={styles.previewForm}>
       <h3>Preview Form</h3>
       <form onSubmit={handleSubmit}>
         {formConfig.fields.map(
-          (field) =>
+          (field, index) =>
             shouldShowField(field) && (
               <div key={field.id} className={styles.formField}>
-                <label>{field.label}</label>
+                <label>{field.label || `label ${index + 1}`}</label>
                 {field.type === "text" && (
                   <input
                     type={
@@ -158,7 +89,7 @@ const PreviewForm = ({ formConfig }) => {
                   >
                     <option value="">Select</option>
                     {field.options.map((option, index) => (
-                      <option key={index} value={option}>
+                      <option key={index + option} value={option}>
                         {option}
                       </option>
                     ))}
@@ -172,9 +103,9 @@ const PreviewForm = ({ formConfig }) => {
                   />
                 )}
                 {field.type === "radio" && (
-                  <div>
+                  <div className={styles.radioBtnContainer}>
                     {field.options.map((option, index) => (
-                      <label key={index}>
+                      <label key={index + option}>
                         <input
                           type="radio"
                           name={field.id}

@@ -8,7 +8,7 @@
 }
 
 .formFieldsContainer{
-  min-height: 70vh;
+  min-height: 65vh;
 }
 
 .btnSection{
@@ -40,4 +40,13 @@
 
 input[type="file"] {
   margin-top: 10px;
+}
+
+.empty{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5rem 0;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
