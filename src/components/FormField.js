@@ -65,7 +65,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
         />
       </label>
       <label>
-      <span className={styles.labelText}>Type:</span>
+        <span className={styles.labelText}>Type:</span>
         <select value={type} onChange={(e) => setType(e.target.value)}>
           <option value="text">Text</option>
           <option value="textarea">Textarea</option>
@@ -76,27 +76,44 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
         </select>
       </label>
 
+      {type === "text" && (
+        <label>
+          <span className={styles.labelText}>Format:</span>
+          <select
+            value={validations.format || ""}
+            onChange={(e) => {
+              setValidations({ ...validations, format: e.target.value });
+            }}
+          >
+            <option value="">None</option>
+            <option value="email">Email</option>
+            <option value="password">Password</option>
+            <option value="phone">Phone</option>
+          </select>
+        </label>
+      )}
+
       {(type === "radio" || type === "dropdown") && (
         <label>
           <span className={styles.labelText}>Options:</span>
-          
+
           <textarea
             value={options.join(",")}
-            onChange={(e) => setOptions(e.target.value.split(",").map((val) => val.trim()))}
-            placeholder="Comma-separated options"
+            onChange={(e) => setOptions(e.target.value.split(","))}
+            placeholder="option1,option2,..."
           />
         </label>
       )}
 
       <label className={styles.checkboxContainer}>
-      <span className={styles.labelText}>Required:</span>
+        <span className={styles.labelText}>Required:</span>
         <input
           type="checkbox"
           checked={required}
           onChange={(e) => setRequired(e.target.checked)}
         />
       </label>
-      
+
       {/* Min/Max length validations only for the case of Text and Text Area (Other cases will be handled by Validations) */}
       <div className={styles.validations}>
         {(type === "text" || type === "textarea") &&
@@ -105,7 +122,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
           validations.format !== "phone" && (
             <>
               <label>
-              <span className={styles.labelText}>Min Length:</span>
+                <span className={styles.labelText}>Min Length:</span>
                 <input
                   type="number"
                   value={validations.minLength || ""}
@@ -119,7 +136,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
               </label>
 
               <label>
-              <span className={styles.labelText}>Max Length:</span>
+                <span className={styles.labelText}>Max Length:</span>
                 <input
                   type="number"
                   value={validations.maxLength || ""}
@@ -134,44 +151,27 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
             </>
           )}
 
-        {type === "text" && (
-          <label>
-            <span className={styles.labelText}>Format:</span>
-            <select
-              value={validations.format || ""}
-              onChange={(e) => {
-                setValidations({ ...validations, format: e.target.value });
-              }}
-            >
-              <option value="">None</option>
-              <option value="email">Email</option>
-              <option value="password">Password</option>
-              <option value="phone">Phone</option>
-            </select>
-          </label>
-        )}
-
         {type === "file" && (
           <>
             <label>
-            <span className={styles.labelText}>Allowed Types:</span>
-              <input
+              <span className={styles.labelText}>Allowed Types:</span>
+              <textarea
                 type="text"
-                placeholder="Comma-separated types"
+                placeholder="application/pdf,image/png,.."
                 value={
                   validations.fileType ? validations.fileType.join(",") : ""
                 }
                 onChange={(e) => {
                   setValidations({
                     ...validations,
-                    fileType: e.target.value.split(",").map((val) => val.trim()),
+                    fileType: e.target.value.split(","),
                   });
                 }}
               />
             </label>
 
             <label>
-            <span className={styles.labelText}>Max File Size(MB):</span>
+              <span className={styles.labelText}>Max File Size(MB):</span>
               <input
                 type="number"
                 value={
@@ -191,7 +191,9 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
 
       <div className={styles.conditionalLogic}>
         <label>
-        <span className={styles.labelText}>Show field if the following field has value:</span>
+          <span className={styles.labelText}>
+            Show field if the following field has value:
+          </span>
           <input
             type="text"
             value={conditionalField}
