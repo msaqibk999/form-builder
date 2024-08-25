@@ -95,7 +95,8 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
           onChange={(e) => setRequired(e.target.checked)}
         />
       </label>
-
+      
+      {/* Min/Max length validations only for the case of Text and Text Area (Other cases will be handled by Validations) */}
       <div className={styles.validations}>
         {(type === "text" || type === "textarea") &&
           validations.format !== "email" &&

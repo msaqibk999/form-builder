@@ -3,6 +3,7 @@ import FormField from "./FormField";
 import styles from "./FormBuilder.module.css";
 import { useNavigate } from "react-router-dom";
 
+// Separate component for Buttons
 const ButtonSection = React.memo(
   ({
     addField,
@@ -39,6 +40,7 @@ const ButtonSection = React.memo(
     );
   }
 );
+
 
 const FormBuilder = ({ formConfig, onSaveForm }) => {
   const [fields, setFields] = useState(formConfig.fields);
@@ -109,6 +111,8 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
       const importedConfig = JSON.parse(event.target.result);
       if (importedConfig && importedConfig.fields) {
         setFields(importedConfig.fields);
+      }else{
+        alert("Please provide valid JSON")
       }
     };
     fileReader.readAsText(e.target.files[0]);

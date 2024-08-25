@@ -49,6 +49,7 @@ const PreviewForm = ({ formConfig }) => {
     }
   };
 
+  // To redirect to homepage in case of no Form Fields
   useEffect(()=>{
     if(formConfig.fields.length === 0) navigate("/")
     // eslint-disable-next-line
