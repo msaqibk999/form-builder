@@ -41,10 +41,13 @@ const ButtonSection = React.memo(
   }
 );
 
-
 const FormBuilder = ({ formConfig, onSaveForm }) => {
   const [fields, setFields] = useState(formConfig.fields);
   const navigate = useNavigate();
+
+  const checkEmptyFields = (formConfig) => {
+    return formConfig?.fields.length === 0
+  }
 
   const addField = () => {
     setFields([
@@ -82,6 +85,10 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
 
   const handleSaveFormConfig = () => {
     const formConfig = { fields };
+    if (checkEmptyFields(formConfig)) {
+      alert("Please add Fields to save!");
+      return;
+    }
     localStorage.setItem("savedFormConfig", JSON.stringify(formConfig));
     onSaveForm(formConfig);
     alert("Form saved!");
@@ -91,11 +98,17 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
     const savedConfig = JSON.parse(localStorage.getItem("savedFormConfig"));
     if (savedConfig && savedConfig.fields) {
       setFields(savedConfig.fields);
+    } else {
+      alert("No saved forms found!");
     }
   };
 
   const handleExportJSON = () => {
     const formConfig = { fields };
+    if (checkEmptyFields(formConfig)) {
+      alert("Please add Fields to export!");
+      return;
+    }
     const dataStr =
       "data:text/json;charset=utf-8," +
       encodeURIComponent(JSON.stringify(formConfig));
@@ -111,8 +124,8 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
       const importedConfig = JSON.parse(event.target.result);
       if (importedConfig && importedConfig.fields) {
         setFields(importedConfig.fields);
-      }else{
-        alert("Please provide valid JSON")
+      } else {
+        alert("Please provide valid JSON");
       }
     };
     fileReader.readAsText(e.target.files[0]);
