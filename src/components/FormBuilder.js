@@ -69,6 +69,10 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
 
   const handleSave = () => {
     const formConfig = { fields };
+    if (checkEmptyFields(formConfig)) {
+      alert("Please add Fields to Preview!");
+      return;
+    }
     onSaveForm(formConfig);
   };
 
@@ -126,6 +130,7 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
         setFields(importedConfig.fields);
       } else {
         alert("Please provide valid JSON");
+        return;
       }
     };
     fileReader.readAsText(e.target.files[0]);
