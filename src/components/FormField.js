@@ -194,6 +194,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
             type="text"
             value={conditionalField}
             onChange={(e) => setConditionalField(e.target.value)}
+            placeholder="Enter Label of the field"
           />
         </label>
       </div>

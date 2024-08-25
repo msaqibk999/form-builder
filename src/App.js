@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import FormBuilder from "./components/FormBuilder";
 import PreviewForm from "./components/PreviewForm";
@@ -9,9 +9,10 @@ import Header from "./components/Header";
 const App = () => {
   const [formConfig, setFormConfig] = useState({ fields: [] });
 
-  const handleSaveForm = (config) => {
+  // Wrap handleSaveForm in useCallback to prevent re-creation on every render
+  const handleSaveForm = useCallback((config) => {
     setFormConfig(config);
-  };
+  }, []);
 
   return (
     <BrowserRouter>

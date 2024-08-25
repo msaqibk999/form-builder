@@ -3,6 +3,43 @@ import FormField from "./FormField";
 import styles from "./FormBuilder.module.css";
 import { useNavigate } from "react-router-dom";
 
+const ButtonSection = React.memo(
+  ({
+    addField,
+    handleSaveFormConfig,
+    handleLoadFormConfig,
+    handleExportJSON,
+    handleImportJSON,
+    handlePreview,
+    fields,
+  }) => {
+    const handleImportBtnClick = () => {
+      const ele = document.getElementById("import-json");
+      ele.click();
+    };
+
+    return (
+      <section className={styles.btnSection}>
+        <button onClick={addField}>Add Field</button>
+        <button onClick={handleSaveFormConfig}>Save Form Configuration</button>
+        <button onClick={handleLoadFormConfig}>Load Form Configuration</button>
+        <button onClick={handleExportJSON}>Export as JSON</button>
+        <button onClick={handleImportBtnClick}>Import from JSON</button>
+        <input
+          id="import-json"
+          type="file"
+          onChange={handleImportJSON}
+          accept=".json"
+          style={{ display: "none" }}
+        />
+        <button onClick={handlePreview} disabled={fields.length === 0}>
+          Preview Form
+        </button>
+      </section>
+    );
+  }
+);
+
 const FormBuilder = ({ formConfig, onSaveForm }) => {
   const [fields, setFields] = useState(formConfig.fields);
   const navigate = useNavigate();
@@ -100,23 +137,16 @@ const FormBuilder = ({ formConfig, onSaveForm }) => {
           <div className={styles.empty}>Please start adding fields!</div>
         )}
       </div>
-      <section className={styles.btnSection}>
-        <button onClick={addField}>Add Field</button>
-        <button onClick={handleSaveFormConfig}>Save Form Configuration</button>
-        <button onClick={handleLoadFormConfig}>Load Form Configuration</button>
-        <button onClick={handleExportJSON}>Export as JSON</button>
-        <button onClick={handleImportBtnClick}>Import from JSON</button>
-        <input
-          id="import-json"
-          type="file"
-          onChange={handleImportJSON}
-          accept=".json"
-          style={{ display: "none" }}
-        />
-        <button onClick={handlePreview} disabled={fields.length === 0}>
-          Preview Form
-        </button>
-      </section>
+      <ButtonSection
+        addField={addField}
+        handleSaveFormConfig={handleSaveFormConfig}
+        handleLoadFormConfig={handleLoadFormConfig}
+        handleExportJSON={handleExportJSON}
+        handleImportJSON={handleImportJSON}
+        handlePreview={handlePreview}
+        handleImportBtnClick={handleImportBtnClick}
+        fields={fields}
+      />
     </div>
   );
 };
