@@ -13,9 +13,12 @@ const validateFields = (formConfig, formData) => {
       valid = false;
     }
 
-    // Min/Max length validation
+    // Min/Max length validation (Not for email, phone and password)
     if (
       value &&
+      validations?.format !== "email" &&
+      validations?.format !== "phone" &&
+      validations?.format !== "password" &&
       validations?.minLength &&
       value.trim().length < validations.minLength
     ) {
@@ -27,6 +30,9 @@ const validateFields = (formConfig, formData) => {
     if (
       value &&
       validations?.maxLength &&
+      validations?.format !== "email" &&
+      validations?.format !== "phone" &&
+      validations?.format !== "password" &&
       value.trim().length > validations.maxLength
     ) {
       newErrors[

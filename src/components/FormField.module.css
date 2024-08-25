@@ -21,7 +21,13 @@
 
 .formField label{
   display: flex;
+  justify-content: flex-start;
   align-items: center;
+}
+
+.labelText{
+  min-width: 5.5rem;
+  text-align: left;
 }
 
 .formField textarea {

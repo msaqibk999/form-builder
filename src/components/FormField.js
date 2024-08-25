@@ -56,7 +56,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
   return (
     <div className={styles.formField}>
       <label>
-        Label:
+        <span className={styles.labelText}>Label:</span>
         <input
           type="text"
           value={label}
@@ -65,7 +65,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
         />
       </label>
       <label>
-        Type:
+      <span className={styles.labelText}>Type:</span>
         <select value={type} onChange={(e) => setType(e.target.value)}>
           <option value="text">Text</option>
           <option value="textarea">Textarea</option>
@@ -78,7 +78,8 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
 
       {(type === "radio" || type === "dropdown") && (
         <label>
-          Options:
+          <span className={styles.labelText}>Options:</span>
+          
           <textarea
             value={options.join(",")}
             onChange={(e) => setOptions(e.target.value.split(",").map((val) => val.trim()))}
@@ -88,7 +89,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
       )}
 
       <label className={styles.checkboxContainer}>
-        Required
+      <span className={styles.labelText}>Required:</span>
         <input
           type="checkbox"
           checked={required}
@@ -104,7 +105,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
           validations.format !== "phone" && (
             <>
               <label>
-                Min Length:
+              <span className={styles.labelText}>Min Length:</span>
                 <input
                   type="number"
                   value={validations.minLength || ""}
@@ -118,7 +119,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
               </label>
 
               <label>
-                Max Length:
+              <span className={styles.labelText}>Max Length:</span>
                 <input
                   type="number"
                   value={validations.maxLength || ""}
@@ -135,7 +136,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
 
         {type === "text" && (
           <label>
-            Format:
+            <span className={styles.labelText}>Format:</span>
             <select
               value={validations.format || ""}
               onChange={(e) => {
@@ -153,7 +154,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
         {type === "file" && (
           <>
             <label>
-              Allowed Types:
+            <span className={styles.labelText}>Allowed Types:</span>
               <input
                 type="text"
                 placeholder="Comma-separated types"
@@ -170,7 +171,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
             </label>
 
             <label>
-              Max File Size (MB):
+            <span className={styles.labelText}>Max File Size(MB):</span>
               <input
                 type="number"
                 value={
@@ -190,7 +191,7 @@ const FormField = ({ field, onRemove, onUpdateField }) => {
 
       <div className={styles.conditionalLogic}>
         <label>
-          Show field if the following field has value:
+        <span className={styles.labelText}>Show field if the following field has value:</span>
           <input
             type="text"
             value={conditionalField}
