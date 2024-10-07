@@ -44,6 +44,7 @@ const PreviewForm = ({ formConfig }) => {
         }
         return acc;
       }, {});
+      setFormData({});
       alert("Form submitted successfully!");
       console.log(formattedData); // Submit form data or send to backend
     }

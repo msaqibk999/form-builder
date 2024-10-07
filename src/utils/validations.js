@@ -14,33 +14,22 @@ const validateFields = (formConfig, formData) => {
     }
 
     // Min/Max length validation (Not for email, phone and password)
-    if (
-      value &&
-      (field.type === "text" || field.type === "textarea") &&
-      validations?.format === "" &&
-      validations?.minLength &&
-      value.trim().length < validations.minLength
-    ) {
-      newErrors[
-        field.id
-      ] = `${field.label} must be at least ${validations.minLength} characters`;
-      valid = false;
-    }
-    if (
-      value &&
-      (field.type === "text" || field.type === "textarea") &&
-      validations?.format === "" &&
-      validations?.maxLength &&
-      value.trim().length > validations.maxLength
-    ) {
-      newErrors[
-        field.id
-      ] = `${field.label} must be less than ${validations.maxLength} characters`;
-      valid = false;
+    // Min/Max length validation for text and textarea
+    if (value && (field.type === "text" || field.type === "textarea") && (validations.format === undefined || validations.format === "")) {
+      // Min length validation
+      if (validations?.minLength && value.trim().length < validations.minLength) {
+        newErrors[field.id] = `${field.label} must be at least ${validations.minLength} characters`;
+        valid = false;
+      }
+      // Max length validation
+      if (validations?.maxLength && value.trim().length > validations.maxLength) {
+        newErrors[field.id] = `${field.label} must be less than ${validations.maxLength} characters`;
+        valid = false;
+      }
     }
 
     // Email validation
-    if (value && validations?.format === "email") {
+    if (value && field.type === "text" && validations?.format === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(value)) {
         newErrors[field.id] = "Invalid email format";
@@ -49,7 +38,7 @@ const validateFields = (formConfig, formData) => {
     }
 
     // Phone number validation
-    if (value && validations?.format === "phone") {
+    if (value && field.type === "text" && validations?.format === "phone") {
       const phoneRegex = /^\d{10}$/;
       if (!phoneRegex.test(value)) {
         newErrors[field.id] = "Invalid phone number format";
@@ -58,7 +47,7 @@ const validateFields = (formConfig, formData) => {
     }
 
     // Password validation
-    if (value && validations?.format === "password") {
+    if (value && field.type === "text" && validations?.format === "password") {
       const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
       if (!passwordRegex.test(value)) {
         newErrors[field.id] =
